@@ -40,14 +40,14 @@ func main() {
 	}
 }
 
-type Command func(w io.Writer)
+type commandFunc func(w io.Writer)
 
 func writeCommand(w *bufio.Writer, logger *log.Logger, done chan<- bool) {
 	defer func() {
 		done <- true
 	}()
 
-	cmds := []Command{
+	cmds := []commandFunc{
 		func(w io.Writer) {
 			command.Nick(w, "mynick")
 		},
@@ -73,7 +73,7 @@ func writeCommand(w *bufio.Writer, logger *log.Logger, done chan<- bool) {
 			command.Part(w, []string{"#test"}, "Bye!")
 		},
 		func(w io.Writer) {
-			command.Quit(w, "BYEBYE")
+			command.Quit(w, "Closed?")
 		},
 	}
 
