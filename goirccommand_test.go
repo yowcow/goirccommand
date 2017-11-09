@@ -7,12 +7,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestPong(t *testing.T) {
+func TestPass(t *testing.T) {
 	buf := new(bytes.Buffer)
-	err := Pong(buf, "hogefuga")
+	err := Pass(buf, "hogefuga")
 
 	assert.Nil(t, err)
-	assert.Equal(t, "PONG :hogefuga\r\n", buf.String())
+	assert.Equal(t, "PASS hogefuga\r\n", buf.String())
 }
 
 func TestNick(t *testing.T) {
@@ -39,10 +39,26 @@ func TestJoin(t *testing.T) {
 	assert.Equal(t, "JOIN #hoge,#fuga,#foo,#bar\r\n", buf.String())
 }
 
+func TestPart(t *testing.T) {
+	buf := new(bytes.Buffer)
+	err := Part(buf, []string{"#hoge", "#fuga", "#foo", "#bar"})
+
+	assert.Nil(t, err)
+	assert.Equal(t, "PART #hoge,#fuga,#foo,#bar\r\n", buf.String())
+}
+
 func TestNames(t *testing.T) {
 	buf := new(bytes.Buffer)
 	err := Names(buf, []string{"#hoge", "#fuga", "#foo", "#bar"})
 
 	assert.Nil(t, err)
 	assert.Equal(t, "NAMES :#hoge,#fuga,#foo,#bar\r\n", buf.String())
+}
+
+func TestPong(t *testing.T) {
+	buf := new(bytes.Buffer)
+	err := Pong(buf, "hogefuga")
+
+	assert.Nil(t, err)
+	assert.Equal(t, "PONG :hogefuga\r\n", buf.String())
 }
