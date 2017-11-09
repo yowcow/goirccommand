@@ -22,22 +22,60 @@ func Nick(w io.Writer, nick string) error {
 
 // User writes a USER command to writer
 // 3.1.3 in RFC 2812
-func User(w io.Writer, username string, mode int, realname string) error {
-	_, err := fmt.Fprintf(w, "USER %s %d * :%s\r\n", username, mode, realname)
+func User(w io.Writer, user string, mode int, realname string) error {
+	_, err := fmt.Fprintf(w, "USER %s %d * :%s\r\n", user, mode, realname)
+	return err
+}
+
+// Quit writes a QUIT command to writer
+// 3.1.7 in RFC 2812
+func Quit(w io.Writer, message string) error {
+	_, err := fmt.Fprint(w, "QUIT")
+	if err != nil {
+		return err
+	}
+	if len(message) > 0 {
+		_, err = fmt.Fprintf(w, " :%s", message)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = fmt.Fprint(w, "\r\n")
 	return err
 }
 
 // Join writes a JOIN command to writer
 // 3.2.1 in RFC 2812
-func Join(w io.Writer, channels []string) error {
-	_, err := fmt.Fprintf(w, "JOIN %s\r\n", strings.Join(channels, ","))
+func Join(w io.Writer, channels, keys []string) error {
+	_, err := fmt.Fprintf(w, "JOIN %s", strings.Join(channels, ","))
+	if err != nil {
+		return err
+	}
+	if len(keys) > 0 {
+		_, err := fmt.Fprintf(w, " %s", strings.Join(keys, ","))
+		if err != nil {
+			return err
+		}
+	}
+	_, err = fmt.Fprint(w, "\r\n")
 	return err
 }
 
 // Part writes a PART command to writer
 // 3.2.2 in RFC 2812
-func Part(w io.Writer, channels []string) error {
-	_, err := fmt.Fprintf(w, "PART %s\r\n", strings.Join(channels, ","))
+func Part(w io.Writer, channels []string, message string) error {
+	//_, err := fmt.Fprintf(w, "PART %s\r\n", strings.Join(channels, ","))
+	_, err := fmt.Fprintf(w, "PART %s", strings.Join(channels, ","))
+	if err != nil {
+		return err
+	}
+	if len(message) > 0 {
+		_, err = fmt.Fprintf(w, " :%s", message)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = fmt.Fprint(w, "\r\n")
 	return err
 }
 
@@ -48,9 +86,60 @@ func Names(w io.Writer, channels []string) error {
 	return err
 }
 
+// Ping writes a PING command to writer
+// 3.7.2 in RFC 2813
+func Ping(w io.Writer, from, to, by string) error {
+	_, err := fmt.Fprint(w, "PING")
+	if err != nil {
+		return err
+	}
+	if len(from) > 0 {
+		_, err = fmt.Fprintf(w, " %s", from)
+		if err != nil {
+			return err
+		}
+	}
+	if len(to) > 0 {
+		_, err = fmt.Fprintf(w, " %s", to)
+		if err != nil {
+			return err
+		}
+	}
+	if len(by) > 0 {
+		_, err = fmt.Fprintf(w, " :%s", by)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = fmt.Fprint(w, "\r\n")
+	return err
+}
+
 // Pong writes a PONG command to writer
 // 3.7.3 in RFC 2813
-func Pong(w io.Writer, server string) error {
-	_, err := fmt.Fprintf(w, "PONG :%s\r\n", server)
+func Pong(w io.Writer, from, to, by string) error {
+	_, err := fmt.Fprint(w, "PONG")
+	if err != nil {
+		return err
+	}
+	if len(from) > 0 {
+		_, err = fmt.Fprintf(w, " %s", from)
+		if err != nil {
+			return err
+		}
+	}
+	if len(to) > 0 {
+		_, err = fmt.Fprintf(w, " %s", to)
+		if err != nil {
+			return err
+		}
+	}
+	if len(by) > 0 {
+		_, err = fmt.Fprintf(w, " :%s", by)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = fmt.Fprint(w, "\r\n")
 	return err
 }
