@@ -32,7 +32,7 @@ Pass a writer along with necessary parameters.
 err := command.Nick(conn, "foobar")
 ```
 
-will write a `NICK` command like: `NICK :foobar\r\n`
+will write a `NICK` command like: `NICK foobar\r\n`
 
 SEE ALSO
 --------
