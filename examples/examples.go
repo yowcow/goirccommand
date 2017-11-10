@@ -70,6 +70,12 @@ func writeCommand(w *bufio.Writer, logger *log.Logger, done chan<- bool) {
 			command.Part(w, []string{"#test1", "#test2"}, "")
 		},
 		func(w io.Writer) {
+			command.Privmsg(w, "#test", "a privmsg message")
+		},
+		func(w io.Writer) {
+			command.Notice(w, "#test", "a notice message")
+		},
+		func(w io.Writer) {
 			command.Part(w, []string{"#test"}, "Bye!")
 		},
 		func(w io.Writer) {

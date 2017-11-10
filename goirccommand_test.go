@@ -133,6 +133,22 @@ func TestNames(t *testing.T) {
 	assert.Equal(t, "NAMES :#hoge,#fuga,#foo,#bar\r\n", buf.String())
 }
 
+func TestPrivmsg(t *testing.T) {
+	buf := new(bytes.Buffer)
+	err := Privmsg(buf, "#foo", "bar")
+
+	assert.Nil(t, err)
+	assert.Equal(t, "PRIVMSG #foo :bar\r\n", buf.String())
+}
+
+func TestNotice(t *testing.T) {
+	buf := new(bytes.Buffer)
+	err := Notice(buf, "#foo", "bar")
+
+	assert.Nil(t, err)
+	assert.Equal(t, "NOTICE #foo :bar\r\n", buf.String())
+}
+
 func TestPing(t *testing.T) {
 	cases := []Case{
 		{

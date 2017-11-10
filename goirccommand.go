@@ -79,8 +79,22 @@ func Names(w io.Writer, channels []string) error {
 	return err
 }
 
+// Privmsg writes a PRIVMSG command to writer
+// 3.3.1 in RFC 2812
+func Privmsg(w io.Writer, target, text string) error {
+	_, err := fmt.Fprintf(w, "PRIVMSG %s :%s\r\n", target, text)
+	return err
+}
+
+// Notice writes a NOTICE command to writer
+// 3.3.1 in RFC 2812
+func Notice(w io.Writer, target, text string) error {
+	_, err := fmt.Fprintf(w, "NOTICE %s :%s\r\n", target, text)
+	return err
+}
+
 // Ping writes a PING command to writer
-// 3.7.2 in RFC 2813
+// 3.7.2 in RFC 2812
 func Ping(w io.Writer, from, to, by string) error {
 	if _, err := fmt.Fprint(w, "PING"); err != nil {
 		return err
@@ -105,7 +119,7 @@ func Ping(w io.Writer, from, to, by string) error {
 }
 
 // Pong writes a PONG command to writer
-// 3.7.3 in RFC 2813
+// 3.7.3 in RFC 2812
 func Pong(w io.Writer, from, to, by string) error {
 	if _, err := fmt.Fprint(w, "PONG"); err != nil {
 		return err
