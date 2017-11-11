@@ -125,6 +125,27 @@ func TestPart(t *testing.T) {
 	}
 }
 
+func TestMode(t *testing.T) {
+	cases := []Case{
+		{
+			input:    []string{"#hoge", "+s", ""},
+			expected: "MODE #hoge +s\r\n",
+		},
+		{
+			input:    []string{"#hoge", "+o", "fuga"},
+			expected: "MODE #hoge +o fuga\r\n",
+		},
+	}
+
+	for _, c := range cases {
+		buf := new(bytes.Buffer)
+		err := Mode(buf, c.input[0], c.input[1], c.input[2])
+
+		assert.Nil(t, err)
+		assert.Equal(t, c.expected, buf.String())
+	}
+}
+
 func TestNames(t *testing.T) {
 	buf := new(bytes.Buffer)
 	err := Names(buf, []string{"#hoge", "#fuga", "#foo", "#bar"})

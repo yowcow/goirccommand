@@ -72,6 +72,21 @@ func Part(w io.Writer, channels []string, message string) error {
 	return err
 }
 
+// Mode writes a MODE command to writer
+// 3.2.3 in RFC 2812
+func Mode(w io.Writer, channel, modes, modeParams string) error {
+	if _, err := fmt.Fprintf(w, "MODE %s %s", channel, modes); err != nil {
+		return err
+	}
+	if len(modeParams) > 0 {
+		if _, err := fmt.Fprintf(w, " %s", modeParams); err != nil {
+			return err
+		}
+	}
+	_, err := fmt.Fprint(w, "\r\n")
+	return err
+}
+
 // Names writes a NAMES command to writer
 // 3.2.5 in RFC 2812
 func Names(w io.Writer, channels []string) error {
